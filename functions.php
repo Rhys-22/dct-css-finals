@@ -1,5 +1,5 @@
 <?php
-session_start();
+
 
 function openCon() {
     $conn = new mysqli("localhost", "root", "", "dct-ccs-finals");
@@ -82,6 +82,46 @@ function addUser() {
     } else {
         echo "Failed to connect to the database.";
     }
+}
+function addSubject($subjectCode, $subjectName) {
+    $conn = openCon();
+    
+    // Prepare the SQL query to insert a new subject
+    $sql = "INSERT INTO subjects (subject_code, subject_name) VALUES (?, ?)";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("ss", $subjectCode, $subjectName);
+    
+    // Execute the query and check if it was successful
+    if ($stmt->execute()) {
+        debugLog("Subject added: $subjectCode - $subjectName");
+    } else {
+        debugLog("Error adding subject: " . $stmt->error);
+    }
+    
+    // Close the statement and connection
+    $stmt->close();
+    closeCon($conn);
+}
+
+function getSubjects() {
+    $conn = openCon();
+    
+    // Fetch all subjects from the database
+    $sql = "SELECT * FROM subjects";
+    $result = $conn->query($sql);
+
+    // Initialize an array to store the subjects
+    $subjects = [];
+    if ($result->num_rows > 0) {
+        while ($row = $result->fetch_assoc()) {
+            $subjects[] = $row;
+        }
+    }
+    
+    // Close the connection
+    closeCon($conn);
+    
+    return $subjects;
 }
 
 ?>

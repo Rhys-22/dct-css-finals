@@ -1,3 +1,22 @@
+<?php
+    include '../partials/header.php';
+    include '../partials/side-bar.php';
+    include '../../functions.php';
+
+    // Handle form submission
+    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+        // Get the form data
+        $subjectCode = $_POST['subject_code'];
+        $subjectName = $_POST['subject_name'];
+        
+        // Call the function to add the subject to the database
+        addSubject($subjectCode, $subjectName);
+    }
+
+    // Fetch all subjects from the database to display in the table
+    $subjects = getSubjects();
+?>
+
 <html>
 <head>
     <title>Add a New Subject</title>
@@ -101,13 +120,15 @@
             <a href="#">Dashboard</a> / Add Subject
         </div>
         <div class="form-container">
-            <div class="form-group">
-                <input type="text" placeholder="Subject Code">
-            </div>
-            <div class="form-group">
-                <input type="text" placeholder="Subject Name">
-            </div>
-            <button class="btn">Add Subject</button>
+            <form method="POST">
+                <div class="form-group">
+                    <input type="text" name="subject_code" placeholder="Subject Code" required>
+                </div>
+                <div class="form-group">
+                    <input type="text" name="subject_name" placeholder="Subject Name" required>
+                </div>
+                <button type="submit" class="btn">Add Subject</button>
+            </form>
         </div>
         <div class="table-container">
             <h2>Subject List</h2>
@@ -120,30 +141,16 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>1001</td>
-                        <td>English</td>
-                        <td>
-                            <button class="btn-edit">Edit</button>
-                            <button class="btn-delete">Delete</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>1002</td>
-                        <td>Mathematics</td>
-                        <td>
-                            <button class="btn-edit">Edit</button>
-                            <button class="btn-delete">Delete</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>1003</td>
-                        <td>Science</td>
-                        <td>
-                            <button class="btn-edit">Edit</button>
-                            <button class="btn-delete">Delete</button>
-                        </td>
-                    </tr>
+                    <?php foreach ($subjects as $subject): ?>
+                        <tr>
+                            <td><?php echo $subject['subject_code']; ?></td>
+                            <td><?php echo $subject['subject_name']; ?></td>
+                            <td>
+                                <button class="btn-edit">Edit</button>
+                                <button class="btn-delete">Delete</button>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
                 </tbody>
             </table>
         </div>
