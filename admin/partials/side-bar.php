@@ -13,11 +13,11 @@
                     </a>
                 </li>
                 <li class="nav-item">
-    <a class="nav-link d-flex align-items-center gap-2" href="#">
-        <i class="fa-solid fa-book fa-fw me-2"></i>
-        Subjects
-    </a>
-</li>
+                    <a class="nav-link d-flex align-items-center gap-2" href="#">
+                        <i class="fa-solid fa-book fa-fw me-2"></i>
+                        Subjects
+                    </a>
+                </li>
 
                 <li class="nav-item">
                     <a class="nav-link d-flex align-items-center gap-2" href="#">
