@@ -1,6 +1,5 @@
 <?php
 
-
 function openCon() {
     $conn = new mysqli("localhost", "root", "", "dct-ccs-finals");
 
@@ -60,12 +59,10 @@ function loginUser($username, $password) {
     return false;
 }
 
-
-
-
 function isLoggedIn() {
     return isset($_SESSION['email']);
 }
+
 function addUser() {
     $con = openCon();
     if ($con) {
@@ -83,6 +80,7 @@ function addUser() {
         echo "Failed to connect to the database.";
     }
 }
+
 function addSubject($subjectCode, $subjectName) {
     $conn = openCon();
     
@@ -122,6 +120,42 @@ function getSubjects() {
     closeCon($conn);
     
     return $subjects;
+}
+
+function getSubjectById($subjectId) {
+    $conn = openCon();
+
+    // Fetch subject details based on the ID
+    $sql = "SELECT * FROM subjects WHERE id = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("i", $subjectId);
+    $stmt->execute();
+
+    $result = $stmt->get_result();
+    $subject = $result->fetch_assoc(); // Fetch the data as an associative array
+    
+    $stmt->close();
+    closeCon($conn);
+    
+    return $subject;
+}
+
+function deleteSubject($subjectId) {
+    $conn = openCon();
+    
+    // Prepare the SQL query to delete the subject
+    $query = "DELETE FROM subjects WHERE id = ?";
+    $stmt = $conn->prepare($query);
+    if (!$stmt) {
+        error_log("Prepare failed: " . $conn->error);
+    }
+    $stmt->bind_param('i', $subjectId);
+    if (!$stmt->execute()) {
+        error_log("Execution failed: " . $stmt->error);
+    }
+    
+    $stmt->close();
+    closeCon($conn);
 }
 
 ?>

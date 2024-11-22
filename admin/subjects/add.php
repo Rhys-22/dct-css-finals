@@ -1,20 +1,20 @@
 <?php
-    include '../partials/header.php';
-    include '../partials/side-bar.php';
-    include '../../functions.php';
+include '../partials/header.php';
+include '../partials/side-bar.php';
+include '../../functions.php';
 
-    // Handle form submission
-    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-        // Get the form data
-        $subjectCode = $_POST['subject_code'];
-        $subjectName = $_POST['subject_name'];
-        
-        // Call the function to add the subject to the database
-        addSubject($subjectCode, $subjectName);
-    }
+// Handle form submission
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    // Get the form data
+    $subjectCode = $_POST['subject_code'];
+    $subjectName = $_POST['subject_name'];
+    
+    // Call the function to add the subject to the database
+    addSubject($subjectCode, $subjectName);
+}
 
-    // Fetch all subjects from the database to display in the table
-    $subjects = getSubjects();
+// Fetch all subjects from the database to display in the table
+$subjects = getSubjects();
 ?>
 
 <html>
@@ -141,16 +141,26 @@
                     </tr>
                 </thead>
                 <tbody>
+                <?php if ($subjects): ?>
                     <?php foreach ($subjects as $subject): ?>
                         <tr>
-                            <td><?php echo $subject['subject_code']; ?></td>
-                            <td><?php echo $subject['subject_name']; ?></td>
+                            <td><?= htmlspecialchars($subject['subject_code']); ?></td>
+                            <td><?= htmlspecialchars($subject['subject_name']); ?></td>
                             <td>
-                                <button class="btn-edit">Edit</button>
-                                <button class="btn-delete">Delete</button>
+                                <a href="edit.php?subject_id=<?= $subject['id']; ?>">
+                                    <button class="btn-edit">Edit</button>
+                                </a>
+                                <a href="delete.php?subject_id=<?= $subject['id']; ?>">
+                                    <button class="btn-delete">Delete</button>
+                                </a>
                             </td>
                         </tr>
                     <?php endforeach; ?>
+                <?php else: ?>
+                    <tr>
+                        <td colspan="3">No subjects available</td>
+                    </tr>
+                <?php endif; ?>
                 </tbody>
             </table>
         </div>
